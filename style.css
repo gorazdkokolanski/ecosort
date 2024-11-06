@@ -514,3 +514,10 @@ section{
     text-align: center;
     align-items: center;
 }
+
+@media only screen and (max-width:1100px){
+    .item img{
+        max-width: 45px;
+        max-height: 45px;
+    }
+}

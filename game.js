@@ -33,6 +33,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ----------------------------
+    // Mobile Device Detection
+    // ----------------------------
+    
+    // Function to Detect Mobile Devices
+    function isMobileDevice() {
+        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+    }
+
+    // Function to Get Delay Based on Device Type
+    function getDelay() {
+        return isMobileDevice() ? 0 : 2000; // 0ms for mobile, 2000ms (2 seconds) for desktop
+    }
+
+    // ----------------------------
     // Define the Mouse and Touch Handlers Separately
     // ----------------------------
     
@@ -374,11 +388,13 @@ document.addEventListener('DOMContentLoaded', function () {
             hideAllSections();
             showSection(gameOverSection);
 
-            // Pause for 2 seconds before navigating back to start
+            const delay = getDelay(); // Get delay based on device type
+
+            // Pause before navigating back to start
             setTimeout(() => {
                 hideAllSections();
                 showSection(startSection);
-            }, 2000); // 2000 milliseconds = 2 seconds
+            }, delay); // 0ms for mobile, 2000ms for desktop
         }
 
         // ----------------------------
@@ -492,13 +508,15 @@ document.addEventListener('DOMContentLoaded', function () {
         levelSpan.textContent = `${levelNumber}${getOrdinalSuffix(levelNumber)} level`;
         secondsSpan.textContent = `${timeTaken}`;
 
-        // Pause for 2 seconds before showing the completed message
+        const delay = getDelay(); // Get delay based on device type
+
+        // Pause before showing the completed message
         setTimeout(() => {
             // Show the "#completed" section
             hideAllSections();
             showSection(completedSection);
 
-            // Pause for 2 seconds before moving to the next level or finishing the game
+            // Pause before moving to the next level or finishing the game
             setTimeout(() => {
                 hideAllSections();
 
@@ -514,10 +532,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         hideAllSections();
                         showSection(startSection);
                         resetGame();
-                    }, 2000); // 2 seconds
+                    }, delay); // 0ms for mobile, 2000ms for desktop
                 }
-            }, 2000); // 2 seconds for completed message
-        }, 2000); // 2 seconds pause after removing grayscale
+            }, delay); // 0ms for mobile, 2000ms for desktop
+        }, delay); // 0ms for mobile, 2000ms for desktop
     }
 
     // Helper Function to Get Ordinal Suffix for Numbers (e.g., 1st, 2nd)
