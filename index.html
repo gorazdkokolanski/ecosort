@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSort</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <section id="start">
+        <img src="img/circ.png" alt="circ" class="circ">
+        <div class="container start-container">
+
+            <h1>
+                <span>EcoSort:</span><br>
+                The Circular<br>
+                Economy Challenge
+            </h1>
+
+            <div class="start">Start Game</div>
+
+            <div class="how">How to play</div>
+
+        </div>
+    </section>
+
+    <section id="how">
+        <img src="img/circ.png" alt="circ" class="circ">
+        <div class="how-container container">
+
+            <h1>
+                <span>How to play</span><br>
+                EcoSort
+            </h1>
+
+            <p>
+                Do you think you know how to recycle?<br>
+                The goal is to organize all the objects that belong to a recycling chain in their
+                respective containers, until they are all in the container they belong to.
+            </p>
+
+            <p>
+                Drag the object from one container to another to complete the level.<br>
+                The higher you get, the harder it gets, as time starts to run out and you have
+                to organize all the containers more quickly
+            </p>
+
+            <p>
+                The E-Waste and Packaging fluxes contain different types of residues, so each
+                type of residue has been separated by category into the 4 levels.
+            </p>
+
+            <div class="start">Start Game</div>
+
+            <div class="undo-container">
+                <div>
+                    <img src="img/arrow.svg" alt="">
+                </div>
+
+                <div>Undo</div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="level">
+
+        <div class="items container grayed-out">
+
+            <div class="item c3">
+                <img src="img/level-1/a13.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-1/a6.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-1/a18.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-1/a3.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-1/a10.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-1/a1.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-1/a15.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-1/a7.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-1/a14.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-1/a9.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-1/a2.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-1/a17.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-1/a5.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-1/a11.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-1/a19.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-1/a4.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-1/a12.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-1/a16.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-1/a8.png" alt="item">
+            </div>
+
+            <div class="undo-container">
+                <div>
+                    <img src="img/arrow.svg" alt="">
+                </div>
+
+                <div>Undo</div>
+            </div>
+
+        </div>
+
+
+        <div class="level-container container">
+
+            <div class="timer">
+                <div class="clock">
+                    <img src="img/stopwatch.svg" alt="stopwatch">
+                    <div class="red-circle"></div>
+                </div>
+
+                <div>
+                    <div class="level-time">1:30 seconds</div>
+                    <div class="actual-timer">00:27s</div>
+                </div>
+            </div>
+
+            <h2>Level 1</h2>
+
+            <div class="bins">
+
+                <div class="bin-container" data-bin="1">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin1.png" alt="bin">
+                    </div>
+
+                    <h3>E-Waste</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic1.png" alt="icon">
+                    </div>
+
+                    <h4>Large Equipment</h4>
+                </div>
+
+                <div class="bin-container" data-bin="2">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin2.png" alt="bin">
+                    </div>
+
+                    <h3>Batteries</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic2.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+                <div class="bin-container" data-bin="3">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin3.png" alt="bin">
+                    </div>
+
+                    <h3>Packaging</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic3.png" alt="icon">
+                    </div>
+
+                    <h4>Glass</h4>
+                </div>
+
+                <div class="bin-container" data-bin="4">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin4.png" alt="bin">
+                    </div>
+
+                    <h3>Textile</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic4.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+            </div>
+
+            
+
+        </div>
+
+    </section>
+    <section class="level">
+
+        <div class="items container grayed-out">
+
+            <div class="item c1">
+                <img src="img/level-2/a4.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-2/a12.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-2/a19.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-2/a10.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-2/a6.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-2/a13.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-2/a2.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-2/a16.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-2/a7.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-2/a5.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-2/a15.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-2/a11.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-2/a9.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-2/a14.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-2/a18.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-2/a1.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-2/a8.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-2/a17.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-2/a3.png" alt="item">
+            </div>
+
+
+            <div class="undo-container">
+                <div>
+                    <img src="img/arrow.svg" alt="">
+                </div>
+
+                <div>Undo</div>
+            </div>
+
+        </div>
+
+
+        <div class="level-container container">
+
+            <div class="timer">
+                <div class="clock">
+                    <img src="img/stopwatch.svg" alt="stopwatch">
+                    <div class="red-circle"></div>
+                </div>
+
+                <div>
+                    <div class="level-time">1:30 seconds</div>
+                    <div class="actual-timer">00:27s</div>
+                </div>
+            </div>
+
+            <h2>Level 2</h2>
+
+            <div class="bins">
+
+                <div class="bin-container" data-bin="1">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin1.png" alt="bin">
+                    </div>
+
+                    <h3>E-Waste</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-2/ic1.png" alt="icon">
+                    </div>
+
+                    <h4>Small devices</h4>
+                </div>
+
+                <div class="bin-container" data-bin="2">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin2.png" alt="bin">
+                    </div>
+
+                    <h3>Batteries</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic2.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+                <div class="bin-container" data-bin="3">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin3.png" alt="bin">
+                    </div>
+
+                    <h3>Packaging</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-2/ic3.png" alt="icon">
+                    </div>
+
+                    <h4>Paper/Cardboard</h4>
+                </div>
+
+                <div class="bin-container" data-bin="4">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin4.png" alt="bin">
+                    </div>
+
+                    <h3>Textile</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic4.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+            </div>
+
+            
+
+        </div>
+
+    </section>
+    <section class="level">
+
+        <div class="items container grayed-out">
+
+            <div class="item c3">
+                <img src="img/level-3/a13.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-3/a7.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-3/a20.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-3/a11.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-3/a4.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-3/a9.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-3/a5.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-3/a12.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-3/a19.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-3/a15.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-3/a3.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-3/a18.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-3/a2.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-3/a10.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-3/a17.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-3/a1.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-3/a14.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-3/a8.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-3/a6.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-3/a16.png" alt="item">
+            </div>
+
+            <div class="undo-container">
+                <div>
+                    <img src="img/arrow.svg" alt="">
+                </div>
+
+                <div>Undo</div>
+            </div>
+
+        </div>
+
+
+
+        <div class="level-container container">
+
+            <div class="timer">
+                <div class="clock">
+                    <img src="img/stopwatch.svg" alt="stopwatch">
+                    <div class="red-circle"></div>
+                </div>
+
+                <div>
+                    <div class="level-time">1:30 seconds</div>
+                    <div class="actual-timer">00:27s</div>
+                </div>
+            </div>
+
+            <h2>Level 3</h2>
+
+            <div class="bins">
+
+                <div class="bin-container" data-bin="1">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin1.png" alt="bin">
+                    </div>
+
+                    <h3>E-Waste</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-3/ic1.png" alt="icon">
+                    </div>
+
+                    <h4>TV & Screens</h4>
+                </div>
+
+                <div class="bin-container" data-bin="2">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin2.png" alt="bin">
+                    </div>
+
+                    <h3>Batteries</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic2.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+                <div class="bin-container" data-bin="3">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin3.png" alt="bin">
+                    </div>
+
+                    <h3>Packaging</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-2/ic4.png" alt="icon">
+                    </div>
+
+                    <h4>Plastic</h4>
+                </div>
+
+                <div class="bin-container" data-bin="4">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin4.png" alt="bin">
+                    </div>
+
+                    <h3>Textile</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic4.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+            </div>
+
+            
+
+        </div>
+
+    </section>
+    <section class="level">
+
+        <div class="items container grayed-out">
+
+            <div class="item c1">
+                <img src="img/level-4/a3.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-4/a10.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-4/a20.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-4/a12.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-4/a5.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-4/a2.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-4/a16.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-4/a11.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-4/a8.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-4/a6.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-4/a15.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-4/a18.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-4/a1.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-4/a19.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-4/a7.png" alt="item">
+            </div>
+            <div class="item c1">
+                <img src="img/level-4/a4.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-4/a13.png" alt="item">
+            </div>
+            <div class="item c4">
+                <img src="img/level-4/a17.png" alt="item">
+            </div>
+            <div class="item c2">
+                <img src="img/level-4/a9.png" alt="item">
+            </div>
+            <div class="item c3">
+                <img src="img/level-4/a14.png" alt="item">
+            </div>
+
+            <div class="undo-container">
+                <div>
+                    <img src="img/arrow.svg" alt="">
+                </div>
+
+                <div>Undo</div>
+            </div>
+
+        </div>
+
+
+
+        <div class="level-container container">
+
+            <div class="timer">
+                <div class="clock">
+                    <img src="img/stopwatch.svg" alt="stopwatch">
+                    <div class="red-circle"></div>
+                </div>
+
+                <div>
+                    <div class="level-time">1:30 seconds</div>
+                    <div class="actual-timer">00:27s</div>
+                </div>
+            </div>
+
+            <h2>Level 4</h2>
+
+            <div class="bins">
+
+                <div class="bin-container" data-bin="1">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin1.png" alt="bin">
+                    </div>
+
+                    <h3>E-Waste</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-4/ic1.png" alt="icon">
+                    </div>
+
+                    <h4>IT Equipment</h4>
+                </div>
+
+                <div class="bin-container" data-bin="2">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin2.png" alt="bin">
+                    </div>
+
+                    <h3>Batteries</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic2.png" alt="icon">
+                    </div>
+
+                    <h4></h4>
+                </div>
+
+                <div class="bin-container" data-bin="3">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin3.png" alt="bin">
+                    </div>
+
+                    <h3>Packaging</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-2/ic4.png" alt="icon">
+                    </div>
+
+                    <h4>Metal</h4>
+                </div>
+
+                <div class="bin-container" data-bin="4">
+                    <div class="actual-bin">
+                        <img class="grayed-out" src="img/bin4.png" alt="bin">
+                    </div>
+
+                    <h3>Textile</h3>
+
+                    <div class="lil-icon-container">
+                        <img src="img/level-1/ic4.png" alt="icon">
+                    </div>
+
+                    <h4>Small devices</h4>
+                </div>
+
+            </div>
+
+            
+
+        </div>
+
+    </section>
+
+    <section id="completed">
+
+        <div class="completed-container container">
+
+            <img src="img/like.png" alt="like">
+
+            <div>
+                Congratulations! Well done!<br>
+                You have completed the<br>
+                <span class="level-span">4th level</span> in
+                <span class="seconds-span">30</span> Seconds!
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="game-over">
+
+        <div class="container game-over-container">
+
+            <img src="img/dislike.png" alt="dislike">
+
+            <div>GAME<br>OVER</div>
+
+        </div>
+
+    </section>
+
+    <script src="game.js"></script>
+</body>
+
+</html>
