@@ -33,8 +33,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ----------------------------
-    // Define the Mouse Down Handler Separately
+    // Define the Mouse and Touch Handlers Separately
     // ----------------------------
+    
+    // Global variables to track the dragged item and its offset
+    window.currentlyDraggedItem = null;
+    window.dragOffsetX = 0;
+    window.dragOffsetY = 0;
+
+    // Function to Handle Mouse Down (Desktop)
     function handleMouseDown(e) {
         const draggedItem = this;
 
@@ -56,18 +63,44 @@ document.addEventListener('DOMContentLoaded', function () {
         // Prevent Default to Avoid Text Selection
         e.preventDefault();
 
-        // Current dragged item and offsets are stored globally for accessibility in onMouseMove and onMouseUp
+        // Store the dragged item and offsets globally
         window.currentlyDraggedItem = draggedItem;
         window.dragOffsetX = offsetX;
         window.dragOffsetY = offsetY;
     }
 
-    // Global variables to track the dragged item and its offset
-    window.currentlyDraggedItem = null;
-    window.dragOffsetX = 0;
-    window.dragOffsetY = 0;
+    // Function to Handle Touch Start (Mobile)
+    function handleTouchStart(e) {
+        const draggedItem = this;
 
-    // Function to Handle Mouse Move
+        // Get the first touch point
+        const touch = e.touches[0];
+
+        // Calculate the Touch Position Relative to the Item
+        const rect = draggedItem.getBoundingClientRect();
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+
+        // Remove Any Transform
+        draggedItem.style.transform = 'none';
+
+        // Bring the Dragged Item to the Front
+        draggedItem.style.zIndex = 1000;
+
+        // Add Event Listeners for Touchmove and Touchend
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd);
+
+        // Prevent Default to Avoid Scrolling
+        e.preventDefault();
+
+        // Store the dragged item and offsets globally
+        window.currentlyDraggedItem = draggedItem;
+        window.dragOffsetX = offsetX;
+        window.dragOffsetY = offsetY;
+    }
+
+    // Function to Handle Mouse Move (Desktop)
     function onMouseMove(e) {
         const draggedItem = window.currentlyDraggedItem;
         if (!draggedItem) return;
@@ -78,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let newLeft = e.clientX - levelRect.left - window.dragOffsetX;
         let newTop = e.clientY - levelRect.top - window.dragOffsetY;
 
-        // Optional: Restrict the Item Within the Level Section Boundaries
+        // Restrict Within Boundaries
         newLeft = Math.max(0, Math.min(newLeft, levelSection.clientWidth - draggedItem.offsetWidth));
         newTop = Math.max(0, Math.min(newTop, levelSection.clientHeight - draggedItem.offsetHeight));
 
@@ -87,7 +120,33 @@ document.addEventListener('DOMContentLoaded', function () {
         draggedItem.style.top = `${newTop}px`;
     }
 
-    // Function to Handle Mouse Up
+    // Function to Handle Touch Move (Mobile)
+    function onTouchMove(e) {
+        const draggedItem = window.currentlyDraggedItem;
+        if (!draggedItem) return;
+
+        // Get the first touch point
+        const touch = e.touches[0];
+
+        // Calculate New Position Relative to the Level Section
+        const levelSection = draggedItem.closest('.level');
+        const levelRect = levelSection.getBoundingClientRect();
+        let newLeft = touch.clientX - levelRect.left - window.dragOffsetX;
+        let newTop = touch.clientY - levelRect.top - window.dragOffsetY;
+
+        // Restrict Within Boundaries
+        newLeft = Math.max(0, Math.min(newLeft, levelSection.clientWidth - draggedItem.offsetWidth));
+        newTop = Math.max(0, Math.min(newTop, levelSection.clientHeight - draggedItem.offsetHeight));
+
+        // Update the Item's Position
+        draggedItem.style.left = `${newLeft}px`;
+        draggedItem.style.top = `${newTop}px`;
+
+        // Prevent scrolling while dragging
+        e.preventDefault();
+    }
+
+    // Function to Handle Mouse Up (Desktop)
     function onMouseUp(e) {
         const draggedItem = window.currentlyDraggedItem;
         if (!draggedItem) return;
@@ -102,6 +161,31 @@ document.addEventListener('DOMContentLoaded', function () {
         // Clear the Dragged Item
         window.currentlyDraggedItem = null;
 
+        // Process Placement
+        processPlacement(draggedItem);
+    }
+
+    // Function to Handle Touch End (Mobile)
+    function onTouchEnd(e) {
+        const draggedItem = window.currentlyDraggedItem;
+        if (!draggedItem) return;
+
+        // Reset z-index
+        draggedItem.style.zIndex = '';
+
+        // Remove Event Listeners
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+
+        // Clear the Dragged Item
+        window.currentlyDraggedItem = null;
+
+        // Process Placement
+        processPlacement(draggedItem);
+    }
+
+    // Function to Process Item Placement After Dragging
+    function processPlacement(draggedItem) {
         // Find the corresponding level section
         const levelSection = draggedItem.closest('.level');
         const binContainers = levelSection.querySelectorAll('.bins .bin-container');
@@ -215,7 +299,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const items = levelSection.querySelectorAll('.items .item, .actual-bin .item'); // Select all items in the current level
         const binContainers = levelSection.querySelectorAll('.bins .bin-container');
-        let correctPlacements = 0;
 
         // ----------------------------
         // Timer Variables and Functions
@@ -356,9 +439,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 disableItemDragging(item);
             }
 
-            // Add Mousedown Event to Start Dragging Only if Not Placed
+            // Add Mousedown and Touchstart Event to Start Dragging Only if Not Placed
             if (!item.classList.contains('placed')) {
                 item.addEventListener('mousedown', handleMouseDown);
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
             }
         });
 
@@ -376,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to Disable Dragging for a Placed Item
     function disableItemDragging(item) {
         item.removeEventListener('mousedown', handleMouseDown);
+        item.removeEventListener('touchstart', handleTouchStart);
         // Alternatively, you can add a transparent overlay or set pointer-events to none
     }
 
@@ -383,7 +468,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function gameCompleted() {
         const currentLevel = levels[currentLevelIndex];
         const levelNumber = currentLevelIndex + 1;
-        const completedMessage = completedSection.querySelector('div');
         const levelSpan = completedSection.querySelector('.level-span');
         const secondsSpan = completedSection.querySelector('.seconds-span');
 
@@ -398,11 +482,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Calculate time taken
-        const timeTaken = parseInt(currentLevel.querySelector('.actual-timer').textContent.split(':')[1]);
+        const timerText = currentLevel.querySelector('.actual-timer').textContent;
+        const timeParts = timerText.split(':');
+        const minutes = parseInt(timeParts[0]);
+        const seconds = parseInt(timeParts[1].replace('s', ''));
+        const timeTaken = (minutes * 60) + seconds;
 
         // Update the completed message with dynamic content
         levelSpan.textContent = `${levelNumber}${getOrdinalSuffix(levelNumber)} level`;
-        secondsSpan.textContent = `${timeTaken+15}`;
+        secondsSpan.textContent = `${timeTaken}`;
 
         // Pause for 2 seconds before showing the completed message
         setTimeout(() => {
@@ -465,8 +553,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.style.transform = '';
                 item.style.zIndex = '';
 
-                // Re-attach the mousedown event listener if necessary
+                // Re-attach the mousedown and touchstart event listeners if necessary
                 item.addEventListener('mousedown', handleMouseDown);
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
             });
 
             // Reset Bin Visuals
