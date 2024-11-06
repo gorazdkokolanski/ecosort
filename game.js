@@ -1,22 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Секциски елементи
     const startSection = document.getElementById('start');
     const howSection = document.getElementById('how');
     const completedSection = document.getElementById('completed');
     const gameOverSection = document.getElementById('game-over'); // Додадено за крај на играта
     const resetButton = document.getElementById('reset-button'); // Осигурајте дека постои во вашиот HTML
 
-    // Бутонки
     const startButtons = document.querySelectorAll('.start'); // "Start Game" бутони во различни секции
     const howButtons = document.querySelectorAll('.how'); // "How to Play" бутони
     const backButtons = document.querySelectorAll('.undo-container, .back-button'); // "Back" бутони во How секцијата
 
-    // Секциите за нивои
     const levels = Array.from(document.querySelectorAll('.level')); // Собирајте ги сите секции за ниво
     let currentLevelIndex = 0; // Следење на тековното ниво
     let timerInterval = null; // За складирање на интервалот за тајмерот
 
-    // Функција за скривање на сите секции
     function hideAllSections() {
         startSection.style.display = 'none';
         howSection.style.display = 'none';
@@ -27,17 +23,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Функција за прикажување на специфична секција
     function showSection(section) {
         section.style.display = 'block';
     }
 
-    // Глобални променливи за следење на движењето на објекти
     window.currentlyDraggedItem = null;
     window.dragOffsetX = 0;
     window.dragOffsetY = 0;
 
-    // Функции за ракување со мишот и допир
     function handleMouseDown(e) {
         const draggedItem = this;
 
@@ -144,7 +137,6 @@ document.addEventListener('DOMContentLoaded', function () {
         processPlacement(draggedItem);
     }
 
-    // Функција за обработка на поставувањето на објектот по движење
     function processPlacement(draggedItem) {
         const levelSection = draggedItem.closest('.level');
         const binContainers = levelSection.querySelectorAll('.bins .bin-container');
@@ -172,7 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const targetBinEntry = binMap.find(entry => entry.binNumber === correctBinNumber);
         if (!targetBinEntry) {
-            console.log(`Нема сад со data-bin="${correctBinNumber}" за објектот "${draggedItem.id}".`);
             return;
         }
 
@@ -189,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 draggedItem.classList.add('correctly-placed');
             }
         } else {
-            // Отстрани класа ако не е правилно поставено
             if (draggedItem.classList.contains('correctly-placed')) {
                 draggedItem.classList.remove('correctly-placed');
             }
@@ -209,7 +199,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Проверете дали сите објекти се правилно поставени
         const allItems = levelSection.querySelectorAll('.items .item');
         const allCorrect = Array.from(allItems).every(item => item.classList.contains('correctly-placed'));
 
@@ -234,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const items = levelSection.querySelectorAll('.items .item, .actual-bin .item'); // Изберете ги сите објекти во тековното ниво
         const binContainers = levelSection.querySelectorAll('.bins .bin-container');
 
-        // Таймер
         const baseTime = 90;
         const timeReduction = 15;
         const totalTime = Math.max(15, baseTime - timeReduction * currentLevelIndex); // Минимално 15 секунди
@@ -284,8 +272,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function disableDragging() {
             items.forEach(item => {
-                // Отстрани класата која ги спречува движењето
-                // Не додавајте 'placed' класа, бидејќи сакаме да ги дозволиме движењето
                 item.classList.remove('placed');
                 item.style.cursor = 'grab';
             });
@@ -331,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const targetBinEntry = Array.from(binContainers).find(entry => parseInt(entry.getAttribute('data-bin')) === correctBinNumber);
             if (!targetBinEntry) {
-                console.log(`Нема сад со data-bin="${correctBinNumber}" за објектот "${item.id}".`);
                 return;
             }
 
@@ -377,23 +362,22 @@ document.addEventListener('DOMContentLoaded', function () {
             clearInterval(timerInterval);
         }
 
-        // Пресметајте го времето
         const timerText = currentLevel.querySelector('.actual-timer').textContent;
         const timeParts = timerText.split(':');
         const minutes = parseInt(timeParts[0]);
         const seconds = parseInt(timeParts[1].replace('s', ''));
-        const timeTaken = (minutes * 60) + seconds;
+        const timeTaken = 90 - (15 * (currentLevelIndex)) - (minutes * 60) - seconds;
+        console.log(seconds)
+        console.log(minutes)
+        console.log(currentLevelIndex)
 
-        // Ажурирајте ја победната порака
         levelSpan.textContent = `${levelNumber}${getOrdinalSuffix(levelNumber)} level`;
         secondsSpan.textContent = `${timeTaken}`;
 
-        // Покажете ја победната секција
         setTimeout(() => {
             hideAllSections();
             showSection(completedSection);
 
-            // Преминете на следното ниво или завршете ја играта
             setTimeout(() => {
                 hideAllSections();
 
