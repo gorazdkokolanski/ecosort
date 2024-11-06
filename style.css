@@ -417,7 +417,6 @@ section{
 .item {
     position: absolute;
     cursor: grab;
-    transition: left 0.2s, top 0.2s; /* Smooth transition when snapping into place */
 }
 
 /* Change cursor for placed items */

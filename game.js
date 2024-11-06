@@ -1,217 +1,160 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Section Elements
+    // Секциски елементи
     const startSection = document.getElementById('start');
     const howSection = document.getElementById('how');
     const completedSection = document.getElementById('completed');
-    const gameOverSection = document.getElementById('game-over'); // Added for game over
-    const resetButton = document.getElementById('reset-button'); // Ensure this exists in your HTML
+    const gameOverSection = document.getElementById('game-over'); // Додадено за крај на играта
+    const resetButton = document.getElementById('reset-button'); // Осигурајте дека постои во вашиот HTML
 
-    // Buttons
-    const startButtons = document.querySelectorAll('.start'); // "Start Game" buttons in various sections
-    const howButtons = document.querySelectorAll('.how'); // "How to Play" buttons
-    const backButtons = document.querySelectorAll('.undo-container, .back-button'); // "Back" buttons in How section
+    // Бутонки
+    const startButtons = document.querySelectorAll('.start'); // "Start Game" бутони во различни секции
+    const howButtons = document.querySelectorAll('.how'); // "How to Play" бутони
+    const backButtons = document.querySelectorAll('.undo-container, .back-button'); // "Back" бутони во How секцијата
 
-    // Level Sections
-    const levels = Array.from(document.querySelectorAll('.level')); // Collect all level sections
-    let currentLevelIndex = 0; // Track the current level
-    let timerInterval = null; // To store the timer interval
+    // Секциите за нивои
+    const levels = Array.from(document.querySelectorAll('.level')); // Собирајте ги сите секции за ниво
+    let currentLevelIndex = 0; // Следење на тековното ниво
+    let timerInterval = null; // За складирање на интервалот за тајмерот
 
-    // Function to Hide All Sections Except Completed and Game Over
+    // Функција за скривање на сите секции
     function hideAllSections() {
         startSection.style.display = 'none';
         howSection.style.display = 'none';
         completedSection.style.display = 'none';
-        gameOverSection.style.display = 'none'; // Hide game over section
+        gameOverSection.style.display = 'none'; // Скријте ја секцијата за крај на играта
         levels.forEach(level => {
             level.style.display = 'none';
         });
     }
 
-    // Function to Show a Specific Section
+    // Функција за прикажување на специфична секција
     function showSection(section) {
         section.style.display = 'block';
     }
 
-    // ----------------------------
-    // Mobile Device Detection
-    // ----------------------------
-    
-    // Function to Detect Mobile Devices
-    function isMobileDevice() {
-        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
-    }
-
-    // Function to Get Delay Based on Device Type
-    function getDelay() {
-        return isMobileDevice() ? 0 : 2000; // 0ms for mobile, 2000ms (2 seconds) for desktop
-    }
-
-    // ----------------------------
-    // Define the Mouse and Touch Handlers Separately
-    // ----------------------------
-    
-    // Global variables to track the dragged item and its offset
+    // Глобални променливи за следење на движењето на објекти
     window.currentlyDraggedItem = null;
     window.dragOffsetX = 0;
     window.dragOffsetY = 0;
 
-    // Function to Handle Mouse Down (Desktop)
+    // Функции за ракување со мишот и допир
     function handleMouseDown(e) {
         const draggedItem = this;
 
-        // Calculate the Mouse Position Relative to the Item
         const rect = draggedItem.getBoundingClientRect();
         const offsetX = e.clientX - rect.left;
         const offsetY = e.clientY - rect.top;
 
-        // Remove Any Transform
         draggedItem.style.transform = 'none';
-
-        // Bring the Dragged Item to the Front
         draggedItem.style.zIndex = 1000;
 
-        // Add Event Listeners for Mousemove and Mouseup
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
 
-        // Prevent Default to Avoid Text Selection
         e.preventDefault();
 
-        // Store the dragged item and offsets globally
         window.currentlyDraggedItem = draggedItem;
         window.dragOffsetX = offsetX;
         window.dragOffsetY = offsetY;
     }
 
-    // Function to Handle Touch Start (Mobile)
     function handleTouchStart(e) {
         const draggedItem = this;
 
-        // Get the first touch point
         const touch = e.touches[0];
 
-        // Calculate the Touch Position Relative to the Item
         const rect = draggedItem.getBoundingClientRect();
         const offsetX = touch.clientX - rect.left;
         const offsetY = touch.clientY - rect.top;
 
-        // Remove Any Transform
         draggedItem.style.transform = 'none';
-
-        // Bring the Dragged Item to the Front
         draggedItem.style.zIndex = 1000;
 
-        // Add Event Listeners for Touchmove and Touchend
         document.addEventListener('touchmove', onTouchMove, { passive: false });
         document.addEventListener('touchend', onTouchEnd);
 
-        // Prevent Default to Avoid Scrolling
         e.preventDefault();
 
-        // Store the dragged item and offsets globally
         window.currentlyDraggedItem = draggedItem;
         window.dragOffsetX = offsetX;
         window.dragOffsetY = offsetY;
     }
 
-    // Function to Handle Mouse Move (Desktop)
     function onMouseMove(e) {
         const draggedItem = window.currentlyDraggedItem;
         if (!draggedItem) return;
 
-        // Calculate New Position Relative to the Level Section
         const levelSection = draggedItem.closest('.level');
         const levelRect = levelSection.getBoundingClientRect();
         let newLeft = e.clientX - levelRect.left - window.dragOffsetX;
         let newTop = e.clientY - levelRect.top - window.dragOffsetY;
 
-        // Restrict Within Boundaries
         newLeft = Math.max(0, Math.min(newLeft, levelSection.clientWidth - draggedItem.offsetWidth));
         newTop = Math.max(0, Math.min(newTop, levelSection.clientHeight - draggedItem.offsetHeight));
 
-        // Update the Item's Position
         draggedItem.style.left = `${newLeft}px`;
         draggedItem.style.top = `${newTop}px`;
     }
 
-    // Function to Handle Touch Move (Mobile)
     function onTouchMove(e) {
         const draggedItem = window.currentlyDraggedItem;
         if (!draggedItem) return;
 
-        // Get the first touch point
         const touch = e.touches[0];
 
-        // Calculate New Position Relative to the Level Section
         const levelSection = draggedItem.closest('.level');
         const levelRect = levelSection.getBoundingClientRect();
         let newLeft = touch.clientX - levelRect.left - window.dragOffsetX;
         let newTop = touch.clientY - levelRect.top - window.dragOffsetY;
 
-        // Restrict Within Boundaries
         newLeft = Math.max(0, Math.min(newLeft, levelSection.clientWidth - draggedItem.offsetWidth));
         newTop = Math.max(0, Math.min(newTop, levelSection.clientHeight - draggedItem.offsetHeight));
 
-        // Update the Item's Position
         draggedItem.style.left = `${newLeft}px`;
         draggedItem.style.top = `${newTop}px`;
 
-        // Prevent scrolling while dragging
         e.preventDefault();
     }
 
-    // Function to Handle Mouse Up (Desktop)
     function onMouseUp(e) {
         const draggedItem = window.currentlyDraggedItem;
         if (!draggedItem) return;
 
-        // Reset z-index
         draggedItem.style.zIndex = '';
 
-        // Remove Event Listeners
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
 
-        // Clear the Dragged Item
         window.currentlyDraggedItem = null;
 
-        // Process Placement
         processPlacement(draggedItem);
     }
 
-    // Function to Handle Touch End (Mobile)
     function onTouchEnd(e) {
         const draggedItem = window.currentlyDraggedItem;
         if (!draggedItem) return;
 
-        // Reset z-index
         draggedItem.style.zIndex = '';
 
-        // Remove Event Listeners
         document.removeEventListener('touchmove', onTouchMove);
         document.removeEventListener('touchend', onTouchEnd);
 
-        // Clear the Dragged Item
         window.currentlyDraggedItem = null;
 
-        // Process Placement
         processPlacement(draggedItem);
     }
 
-    // Function to Process Item Placement After Dragging
+    // Функција за обработка на поставувањето на објектот по движење
     function processPlacement(draggedItem) {
-        // Find the corresponding level section
         const levelSection = draggedItem.closest('.level');
         const binContainers = levelSection.querySelectorAll('.bins .bin-container');
 
-        // Create binMap for this level
         const binMap = Array.from(binContainers).map(binContainer => {
             const binNumber = parseInt(binContainer.getAttribute('data-bin'));
             const actualBin = binContainer.querySelector('.actual-bin');
             return { binNumber, actualBin };
         });
 
-        // Determine the Correct Bin Number for the Dragged Item
         let correctBinNumber = null;
         const itemClasses = Array.from(draggedItem.classList);
         itemClasses.forEach(cls => {
@@ -224,20 +167,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (!correctBinNumber) {
-            console.log(`Item "${draggedItem.id}" does not have a valid class to determine the correct bin.`);
-            return; // No correct bin found
+            return;
         }
 
-        // Find the Corresponding Actual-Bin
         const targetBinEntry = binMap.find(entry => entry.binNumber === correctBinNumber);
         if (!targetBinEntry) {
-            console.log(`No bin found with data-bin="${correctBinNumber}" for item "${draggedItem.id}".`);
-            return; // No matching bin found
+            console.log(`Нема сад со data-bin="${correctBinNumber}" за објектот "${draggedItem.id}".`);
+            return;
         }
 
         const targetBin = targetBinEntry.actualBin;
         if (!targetBin) {
-            console.log(`Actual bin element missing for data-bin="${correctBinNumber}".`);
             return;
         }
 
@@ -245,57 +185,39 @@ document.addEventListener('DOMContentLoaded', function () {
         const binRect = targetBin.getBoundingClientRect();
 
         if (isOverlapping(itemRect, binRect)) {
-            // **Check if the Item is Already Placed**
-            if (!draggedItem.classList.contains('placed')) {
-                // Mark as Placed
-                draggedItem.classList.add('placed');
-                draggedItem.style.cursor = 'default';
-
-                // **Increment the Correct Placements Counter Only Once**
-                levelSection.dataset.correctPlacements = parseInt(levelSection.dataset.correctPlacements || '0') + 1;
-
-                console.log(`Item "${draggedItem.id}" placed correctly in bin ${correctBinNumber}.`);
-
-                // **Disable Further Dragging**
-                disableItemDragging(draggedItem);
-
-                // Check if All Items Are Placed Correctly
-                if (parseInt(levelSection.dataset.correctPlacements) === levelSection.querySelectorAll('.items .item').length) {
-                    gameCompleted();
-                }
-            } else {
-                // Item is already placed; do nothing
+            if (!draggedItem.classList.contains('correctly-placed')) {
+                draggedItem.classList.add('correctly-placed');
             }
         } else {
-            // **Check if the Item Overlaps with Any Other Actual-Bin (Incorrect Placement)**
+            // Отстрани класа ако не е правилно поставено
+            if (draggedItem.classList.contains('correctly-placed')) {
+                draggedItem.classList.remove('correctly-placed');
+            }
+
             binMap.forEach(binEntry => {
-                if (binEntry.binNumber === correctBinNumber) return; // Skip the correct bin
+                if (binEntry.binNumber === correctBinNumber) return; // Прескокнете го точниот сад
 
                 if (!binEntry.actualBin) {
-                    console.log(`Actual bin element missing for data-bin="${binEntry.binNumber}".`);
                     return;
                 }
 
                 const otherBinRect = binEntry.actualBin.getBoundingClientRect();
 
                 if (isOverlapping(itemRect, otherBinRect)) {
-                    console.log(`Item "${draggedItem.id}" is placed in incorrect bin ${binEntry.binNumber}. Correct bin is ${correctBinNumber}.`);
 
-                    // Trigger Visual Feedback (e.g., Shake Animation)
-                    binEntry.actualBin.classList.add('shake');
-                    setTimeout(() => {
-                        binEntry.actualBin.classList.remove('shake');
-                    }, 500);
-
-                    // Animate Back to Original Position
-                    draggedItem.style.left = draggedItem.dataset.originalLeft;
-                    draggedItem.style.top = draggedItem.dataset.originalTop;
                 }
             });
         }
+
+        // Проверете дали сите објекти се правилно поставени
+        const allItems = levelSection.querySelectorAll('.items .item');
+        const allCorrect = Array.from(allItems).every(item => item.classList.contains('correctly-placed'));
+
+        if (allCorrect) {
+            gameCompleted();
+        }
     }
 
-    // Function to Check if Two Rectangles Overlap
     function isOverlapping(rect1, rect2) {
         return !(
             rect1.right < rect2.left ||
@@ -305,40 +227,29 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     }
 
-    // Function to Initialize a Specific Level
     function initializeLevel(levelSection) {
-        // Ensure the level is visible
         levelSection.style.display = 'block';
-        levelSection.dataset.correctPlacements = 0; // Initialize correct placements
+        levelSection.dataset.correctPlacements = 0; // Инитилизирате бројот на правилно поставени објекти
 
-        const items = levelSection.querySelectorAll('.items .item, .actual-bin .item'); // Select all items in the current level
+        const items = levelSection.querySelectorAll('.items .item, .actual-bin .item'); // Изберете ги сите објекти во тековното ниво
         const binContainers = levelSection.querySelectorAll('.bins .bin-container');
 
-        // ----------------------------
-        // Timer Variables and Functions
-        // ----------------------------
-
-        // Dynamic Total Time: 90 - 15 * currentLevelIndex
+        // Таймер
         const baseTime = 90;
         const timeReduction = 15;
-        const totalTime = Math.max(15, baseTime - timeReduction * currentLevelIndex); // Minimum 15 seconds
+        const totalTime = Math.max(15, baseTime - timeReduction * currentLevelIndex); // Минимално 15 секунди
         let timeRemaining = totalTime;
 
-        // Select the actual-timer div within the current level
         const actualTimer = levelSection.querySelector('.actual-timer');
 
-        // Function to Start the Timer
         function startTimer() {
-            // Initialize timeRemaining
             timeRemaining = totalTime;
             updateTimerDisplay();
 
-            // Clear any existing interval
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
 
-            // Start the countdown
             timerInterval = setInterval(() => {
                 timeRemaining--;
                 updateTimerDisplay();
@@ -350,18 +261,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 1000);
         }
 
-        // Function to Update the Timer Display
         function updateTimerDisplay() {
             const minutes = Math.floor(timeRemaining / 60);
             const seconds = timeRemaining % 60;
 
-            // Format minutes and seconds to have leading zeros if needed
             const formattedMinutes = minutes.toString();
             const formattedSeconds = seconds.toString().padStart(2, '0');
 
             actualTimer.textContent = `${formattedMinutes}:${formattedSeconds}s`;
 
-            // Change color when time is running low (e.g., last 10 seconds)
             if (timeRemaining <= 10) {
                 actualTimer.style.color = 'red';
             } else {
@@ -369,44 +277,36 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Function to End the Game Due to Timeout
         function endGameDueToTimeOut() {
-            disableDragging(); // Disable dragging
+            disableDragging(); // Деактивирајте движењето
             showGameOverMessage();
         }
 
-        // Function to Disable Dragging of All Items
         function disableDragging() {
             items.forEach(item => {
-                item.classList.add('placed'); // Mark as placed to prevent dragging
-                item.style.cursor = 'default';
+                // Отстрани класата која ги спречува движењето
+                // Не додавајте 'placed' класа, бидејќи сакаме да ги дозволиме движењето
+                item.classList.remove('placed');
+                item.style.cursor = 'grab';
             });
         }
 
-        // Function to Show "Game Over" Message
         function showGameOverMessage() {
             hideAllSections();
             showSection(gameOverSection);
 
-            const delay = getDelay(); // Get delay based on device type
-
-            // Pause before navigating back to start
             setTimeout(() => {
                 hideAllSections();
                 showSection(startSection);
-            }, delay); // 0ms for mobile, 2000ms for desktop
+            }, 2000); // 2 секунди
         }
 
-        // ----------------------------
-        // Initialize Draggable Items and Mark Pre-Placed Items
-        // ----------------------------
+        // Иницијализација на движење на објекти
         items.forEach((item, index) => {
-            // Assign a Unique ID if Not Present
             if (!item.id) {
                 item.id = `item-${currentLevelIndex + 1}-${index + 1}`;
             }
 
-            // Store Original Positions
             if (!item.dataset.originalLeft) {
                 item.dataset.originalLeft = `${item.offsetLeft}px`;
             }
@@ -414,7 +314,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.dataset.originalTop = `${item.offsetTop}px`;
             }
 
-            // Determine the Correct Bin Number from the Item's Class
             let correctBinNumber = null;
             const itemClasses = Array.from(item.classList);
             itemClasses.forEach(cls => {
@@ -427,234 +326,184 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (!correctBinNumber) {
-                console.log(`Item "${item.id}" does not have a valid class to determine the correct bin.`);
-                return; // Skip items without a valid c-class
+                return;
             }
 
-            // Find the Corresponding Bin Entry
             const targetBinEntry = Array.from(binContainers).find(entry => parseInt(entry.getAttribute('data-bin')) === correctBinNumber);
             if (!targetBinEntry) {
-                console.log(`No bin found with data-bin="${correctBinNumber}" for item "${item.id}".`);
-                return; // Skip if corresponding bin is not found
+                console.log(`Нема сад со data-bin="${correctBinNumber}" за објектот "${item.id}".`);
+                return;
             }
 
             const actualBin = targetBinEntry.querySelector('.actual-bin');
 
-            // Check if the Item is Already Inside Its Correct Bin
+            // Проверете дали објектот е веќе поставен правилно
             if (isItemInCorrectBin(item, { binNumber: correctBinNumber, actualBin })) {
-                // Mark as Placed
-                item.classList.add('placed');
-                item.style.cursor = 'default';
-
-                // Increment the Correct Placements Counter
-                levelSection.dataset.correctPlacements = parseInt(levelSection.dataset.correctPlacements || '0') + 1;
-
-                console.log(`Item "${item.id}" is pre-placed in bin ${correctBinNumber}.`);
-
-                // Disable Further Dragging
-                disableItemDragging(item);
+                item.classList.add('correctly-placed');
+                console.log(`Објектот "${item.id}" е претходно поставен во сад ${correctBinNumber}.`);
             }
 
-            // Add Mousedown and Touchstart Event to Start Dragging Only if Not Placed
-            if (!item.classList.contains('placed')) {
-                item.addEventListener('mousedown', handleMouseDown);
-                item.addEventListener('touchstart', handleTouchStart, { passive: false });
-            }
+            // Додајте наслушувачи за движење без оглед на поставување
+            item.style.cursor = 'grab'; // Осигурете дека курсорот покажува дека е движење
+            item.addEventListener('mousedown', handleMouseDown);
+            item.addEventListener('touchstart', handleTouchStart, { passive: false });
         });
 
-        // Start the Timer for the Current Level
+        // Почнете ја таймерот за тековното ниво
         startTimer();
     }
 
-    // Function to Check if an Item is Inside Its Correct Bin
+    // Функција за проверка дали објектот е во точниот сад
     function isItemInCorrectBin(item, binEntry) {
         const itemRect = item.getBoundingClientRect();
         const binRect = binEntry.actualBin.getBoundingClientRect();
         return isOverlapping(itemRect, binRect);
     }
 
-    // Function to Disable Dragging for a Placed Item
-    function disableItemDragging(item) {
-        item.removeEventListener('mousedown', handleMouseDown);
-        item.removeEventListener('touchstart', handleTouchStart);
-        // Alternatively, you can add a transparent overlay or set pointer-events to none
-    }
-
-    // Function to Handle Game Completion
+    // Функција за обработка на победа
     function gameCompleted() {
         const currentLevel = levels[currentLevelIndex];
         const levelNumber = currentLevelIndex + 1;
         const levelSpan = completedSection.querySelector('.level-span');
         const secondsSpan = completedSection.querySelector('.seconds-span');
 
-        // Remove Grayscale from All Items
+        // Отстрани Грејскале од сите објекти
         currentLevel.querySelectorAll(".grayed-out").forEach(gr => {
             gr.classList.add("not-gray");
         });
 
-        // Clear the Timer as the Game is Completed
+        // Исчистете ја таймерот
         if (timerInterval) {
             clearInterval(timerInterval);
         }
 
-        // Calculate time taken
+        // Пресметајте го времето
         const timerText = currentLevel.querySelector('.actual-timer').textContent;
         const timeParts = timerText.split(':');
         const minutes = parseInt(timeParts[0]);
         const seconds = parseInt(timeParts[1].replace('s', ''));
         const timeTaken = (minutes * 60) + seconds;
 
-        // Update the completed message with dynamic content
+        // Ажурирајте ја победната порака
         levelSpan.textContent = `${levelNumber}${getOrdinalSuffix(levelNumber)} level`;
         secondsSpan.textContent = `${timeTaken}`;
 
-        const delay = getDelay(); // Get delay based on device type
-
-        // Pause before showing the completed message
+        // Покажете ја победната секција
         setTimeout(() => {
-            // Show the "#completed" section
             hideAllSections();
             showSection(completedSection);
 
-            // Pause before moving to the next level or finishing the game
+            // Преминете на следното ниво или завршете ја играта
             setTimeout(() => {
                 hideAllSections();
 
                 if (currentLevelIndex < levels.length - 1) {
-                    // Move to the Next Level
                     currentLevelIndex++;
                     const nextLevel = levels[currentLevelIndex];
-                    initializeLevel(nextLevel); // Initialize Next Level
+                    initializeLevel(nextLevel);
                 } else {
-                    // All Levels Completed
-                    // Optionally, show a final message or reset the game
+                    // Завршете ја играта
                     setTimeout(() => {
                         hideAllSections();
                         showSection(startSection);
                         resetGame();
-                    }, delay); // 0ms for mobile, 2000ms for desktop
+                    }, 2000); // 2 секунди
                 }
-            }, delay); // 0ms for mobile, 2000ms for desktop
-        }, delay); // 0ms for mobile, 2000ms for desktop
+            }, 2000); // 2 секунди за победната порака
+        }, 2000); // 2 секунди паузата пред да се покаже победната порака
     }
 
-    // Helper Function to Get Ordinal Suffix for Numbers (e.g., 1st, 2nd)
+    // Помошна функција за добивање на суфикс за бројевите
     function getOrdinalSuffix(n) {
         const s = ["th", "st", "nd", "rd"],
             v = n % 100;
         return s[(v - 20) % 10] || s[v] || s[0];
     }
 
-    // Function to Reset the Game
+    // Функција за ресетирање на играта
     function resetGame() {
-        // Clear Timer
         if (timerInterval) {
             clearInterval(timerInterval);
         }
 
-        // Reset All Levels
         levels.forEach((level, index) => {
             const items = level.querySelectorAll('.items .item, .actual-bin .item');
             const binContainers = level.querySelectorAll('.bins .bin-container');
 
-            // Reset Items
             items.forEach(item => {
-                // Reset Position to Original
                 item.style.left = item.dataset.originalLeft;
                 item.style.top = item.dataset.originalTop;
 
-                // Remove 'placed' Class and Reset Cursor
-                item.classList.remove('placed');
+                item.classList.remove('correctly-placed');
                 item.style.cursor = 'grab';
 
-                // Reset Any Transformations or z-index
                 item.style.transform = '';
                 item.style.zIndex = '';
 
-                // Re-attach the mousedown and touchstart event listeners if necessary
+                item.removeEventListener('mousedown', handleMouseDown);
+                item.removeEventListener('touchstart', handleTouchStart);
                 item.addEventListener('mousedown', handleMouseDown);
                 item.addEventListener('touchstart', handleTouchStart, { passive: false });
             });
 
-            // Reset Bin Visuals
             binContainers.forEach(bin => {
                 bin.querySelector('.actual-bin').classList.remove('shake');
             });
 
-            // Hide All Levels
             level.style.display = 'none';
         });
 
-        // Reset Completed Section
         if (completedSection) {
             completedSection.style.display = 'none';
-            completedSection.querySelector('div').textContent = ''; // Clear Any Messages
+            completedSection.querySelector('div').textContent = ''; // Исчистете ги пораките
         }
 
-        // Reset Game Over Section
         if (gameOverSection) {
             gameOverSection.style.display = 'none';
         }
 
-        // Reset Current Level Index
         currentLevelIndex = 0;
 
-        // Show Start Section
         hideAllSections();
         showSection(startSection);
 
-        console.log('Game has been reset.');
     }
 
-    // ----------------------------
-    // Event Listeners for Navigation
-    // ----------------------------
-
-    // Function to Start the Game (Initialize the First Level)
+    // Додадени наслушувачи на настани за навигација
     function startGame() {
         hideAllSections();
         if (levels.length > 0) {
             initializeLevel(levels[currentLevelIndex]);
         } else {
-            console.error('No levels found in the HTML.');
         }
     }
 
-    // Function to Show How to Play
     function showHowToPlay() {
         hideAllSections();
         showSection(howSection);
     }
 
-    // Function to Show Start Section from How Section
     function backToStart() {
         hideAllSections();
         showSection(startSection);
     }
 
-    // Add Click Event Listeners to "Start Game" Buttons
     startButtons.forEach(button => {
         button.addEventListener('click', startGame);
     });
 
-    // Add Click Event Listeners to "How to Play" Buttons
     howButtons.forEach(button => {
         button.addEventListener('click', showHowToPlay);
     });
 
-    // Add Click Event Listeners to "Back" Buttons in How Section
     backButtons.forEach(button => {
         button.addEventListener('click', backToStart);
     });
 
-    // Add Click Event Listener to Reset Button
     if (resetButton) {
         resetButton.addEventListener('click', resetGame);
     }
 
-    // ----------------------------
-    // Initial Setup: Show Start Section
-    // ----------------------------
     hideAllSections();
     showSection(startSection);
 });
