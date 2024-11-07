@@ -705,4 +705,32 @@ section{
     .bin-container h3{
         font-size: 20px;
     }
+
+    .undo-container>div:nth-child(1){
+        height: 40px;
+        width: 40px;
+    }
+
+    .undo-container img{
+        width: 25px;
+    }
+
+    .undo-container>div:nth-child(2){
+        font-size: 14px;
+    }
+
+    .undo-container{
+        gap: 7px;
+    }
+
+    .next{
+        font-size: 20px;
+        width: 120px;
+        height: 40px;
+    }
+
+    .top-thing>div:nth-child(2)>div{
+        font-size: 9px;
+        inset: 9px;
+    }
 }
