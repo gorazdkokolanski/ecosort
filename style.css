@@ -588,6 +588,7 @@ section{
     align-items: center;
     justify-content: center;
     display: none;
+    z-index: 350;
 }
 
 .passed-level .next{
