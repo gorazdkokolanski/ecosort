@@ -232,10 +232,15 @@ section{
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    position: relative;
 }
 
 .actual-bin{
     width: 80%;
+}
+
+.bin-container>.lil-icon-container{
+    display: none;
 }
 
 .lil-icon-container{
@@ -252,6 +257,7 @@ section{
 
 .bin-container h3{
     font-size: 30px;
+    margin-bottom: 40px;
 }
 
 .bin-container h4{
@@ -519,13 +525,25 @@ section{
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: center;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 300;
+    cursor: pointer;
+}
+
+.top-thing.activated{
     align-items: flex-start;
-    display: none;
+    bottom: unset;
+    top: -150px;
 }
 
 .top-thing>div:nth-child(2){
     position: relative;
     width: 100%;
+    display: none;
 }
 
 .top-thing .lil-icon-container{
@@ -542,18 +560,17 @@ section{
     color: white;
 }
 
+.top-thing.activated>div:nth-child(2){
+    display: block;
+}
+
 .passed-level .top-thing{
-    display: flex;
 }
 
 .passed-level .level-container{
-    height: auto;
-    padding: 50px 0;
-    gap: 50px;
 }
 
 .passed-level .items{
-    height: 100%;
 }
 
 .next{

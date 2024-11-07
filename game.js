@@ -119,12 +119,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!draggedItem) return;
 
         const levelSection = draggedItem.closest('.level');
-        const levelRect = levelSection.getBoundingClientRect();
-        let newLeft = e.clientX - levelRect.left - window.dragOffsetX + (draggedItem.offsetWidth / 2);
-        let newTop = e.clientY - levelRect.top - window.dragOffsetY + (draggedItem.offsetHeight / 2);
+        const container = levelSection.querySelector('.container');
+        const containerRect = container.getBoundingClientRect();
 
-        newLeft = Math.max(0, Math.min(newLeft, levelSection.clientWidth));
-        newTop = Math.max(0, Math.min(newTop, levelSection.clientHeight));
+        let newLeft = e.clientX - containerRect.left - window.dragOffsetX + (draggedItem.offsetWidth / 2);
+        let newTop = e.clientY - containerRect.top - window.dragOffsetY + (draggedItem.offsetHeight / 2);
+
+        newLeft = Math.max(0, Math.min(newLeft, container.clientWidth));
+        newTop = Math.max(0, Math.min(newTop, container.clientHeight));
 
         draggedItem.style.left = `${newLeft}px`;
         draggedItem.style.top = `${newTop}px`;
@@ -159,12 +161,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const touch = e.touches[0];
 
         const levelSection = draggedItem.closest('.level');
-        const levelRect = levelSection.getBoundingClientRect();
-        let newLeft = touch.clientX - levelRect.left - window.dragOffsetX + (draggedItem.offsetWidth / 2);
-        let newTop = touch.clientY - levelRect.top - window.dragOffsetY + (draggedItem.offsetHeight / 2);
+        const container = levelSection.querySelector('.container');
+        const containerRect = container.getBoundingClientRect();
 
-        newLeft = Math.max(0, Math.min(newLeft, levelSection.clientWidth));
-        newTop = Math.max(0, Math.min(newTop, levelSection.clientHeight));
+        let newLeft = touch.clientX - containerRect.left - window.dragOffsetX + (draggedItem.offsetWidth / 2);
+        let newTop = touch.clientY - containerRect.top - window.dragOffsetY + (draggedItem.offsetHeight / 2);
+
+        newLeft = Math.max(0, Math.min(newLeft, container.clientWidth));
+        newTop = Math.max(0, Math.min(newTop, container.clientHeight));
 
         draggedItem.style.left = `${newLeft}px`;
         draggedItem.style.top = `${newTop}px`;
@@ -473,23 +477,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 currentLevel.classList.add('passed-level');
 
-                // Adjust the position of all .item elements
-                const topThing = currentLevel.querySelector('.top-thing');
-                const topThingHeight = topThing.offsetHeight;
-
-                const items = currentLevel.querySelectorAll('.items .item');
-                items.forEach(item => {
-                    let currentTop = parseFloat(item.style.top);
-                    if (isNaN(currentTop)) {
-                        const itemRect = item.getBoundingClientRect();
-                        const levelRect = currentLevel.getBoundingClientRect();
-                        currentTop = itemRect.top - levelRect.top;
-                    }
-
-                    const newTop = currentTop + topThingHeight;
-                    item.style.top = `${newTop}px`;
-
-                    item.dataset.adjustedTop = item.style.top;
+                // Add click event listeners to .top-thing items
+                const topThings = currentLevel.querySelectorAll('.top-thing');
+                topThings.forEach(topThing => {
+                    topThing.addEventListener('click', function() {
+                        topThing.classList.toggle('activated');
+                    });
                 });
 
             }, 2000);
@@ -538,6 +531,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             level.style.display = 'none';
             level.classList.remove('passed-level');
+
+            // Remove event listeners from .top-thing items
+            const topThings = level.querySelectorAll('.top-thing');
+            topThings.forEach(topThing => {
+                topThing.classList.remove('activated');
+                topThing.replaceWith(topThing.cloneNode(true));
+            });
         });
 
         if (completedSection) {
@@ -608,7 +608,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Corrected the typo here
     // Add event listeners to 'next' buttons
     const nextButtons = document.querySelectorAll('.next');
     nextButtons.forEach(button => {
